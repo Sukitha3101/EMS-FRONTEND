@@ -1,0 +1,56 @@
+<div class="category-container">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <label for="name">Name:</label>
+            <input id="name" type="text" formControlName="name">
+        </div>
+        <div class="form-row">
+            <label for="description">Description:</label>
+            <textarea id="description" formControlName="description" rows="4" cols="12"></textarea>
+        </div>
+        <button type="submit" [disabled]="!isAdmin()" >Create</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let category of categories">
+                <td>
+                    <ng-container *ngIf="editingCategory?.categoryID === category.categoryID; else displayName">
+                        <input type="text" [(ngModel)]="editingCategoryName">
+                    </ng-container>
+                    <ng-template #displayName>
+                        <span>{{ category.name }}</span>
+                    </ng-template>
+                </td>
+                <td>
+                    <ng-container *ngIf="editingCategory?.categoryID === category.categoryID; else displayDescription">
+                        <input type="text" [(ngModel)]="editingCategoryDescription">
+                    </ng-container>
+                    <ng-template #displayDescription>
+                        <span>{{ category.description }}</span>
+                    </ng-template>
+                </td>
+                <td>
+                    <ng-container *ngIf="editingCategory?.categoryID === category.categoryID; else actionButtons">
+                        <button (click)="updateCategory()">Update</button>
+                        <button (click)="cancelEdit()">Cancel</button>
+                    </ng-container>
+                    <ng-template #actionButtons>
+                        <button (click)="editCategory(category)"
+                            [disabled]="!isAdmin() || (isEditing() && editingCategory?.categoryID !== category.categoryID)">Edit</button>
+                        <button (click)="deleteCategory(category.categoryID)" 
+                            [disabled]="!isAdmin() || isEditing()">Delete</button>
+                    </ng-template>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

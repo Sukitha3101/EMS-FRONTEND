@@ -1,0 +1,44 @@
+<div class="category-container">
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <label for="dropdown">User:</label>
+      <select id="dropdown" formControlName="user">
+        <option *ngFor="let option of userDropdownOptions" [value]="option.userID">
+          {{ option.userID }} - {{ option.name }} 
+        </option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" formControlName="startDate">
+    </div>
+    <div class="form-row">
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" formControlName="endDate">
+    </div>
+    <button type="submit">Generate</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Period</th>
+        <th>Total Amount</th>
+        <th>Generated Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let report of reports; let i=index">
+        <td>{{ getUserName(report.user.userID) }}</td>
+        <td>{{ report.period }}</td>
+        <td>{{ report.totalAmount }}</td>
+        <td>{{ formatDate(report.generatedDate) }}</td>
+        <td>
+          <button (click)="deleteReport(i)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,49 @@
+<div class="home-container">
+  <nav class="sidebar">
+    <div class="logo" (click)="navigateToUrl()">
+      <mat-icon>monetization_on</mat-icon>
+      <strong>EMS</strong>
+    </div>
+    <button mat-button 
+            [ngClass]="{'active': currentComponent === 'expenses'}"
+            (click)="showComponent('expenses')">Expenses</button>
+    <button mat-button 
+            [ngClass]="{'active': currentComponent === 'category'}"
+            (click)="showComponent('category')">Category</button>
+    <button mat-button 
+            [ngClass]="{'active': currentComponent === 'reports'}"
+            (click)="showComponent('reports')">Reports</button>
+  </nav>
+  <div class="content">
+    <div class="content-logo">
+      <mat-icon>account_balance</mat-icon>
+      <strong>Expense Management System</strong>
+    </div>
+    <app-expense *ngIf="currentComponent === 'expenses'"></app-expense>
+    <app-category *ngIf="currentComponent === 'category'"></app-category>
+    <app-report *ngIf="currentComponent === 'reports'"></app-report>
+  </div>
+  
+  <!-- Notifcation -->
+  <div class="notification-icon" (click)="openNotificationModal($event)">
+    <mat-icon>notifications</mat-icon>
+  </div>
+
+  <div class="notification-backdrop" *ngIf="showModal" (click)="closeNotificationModal()"></div>
+
+  <div class="notification-modal" *ngIf="showModal">
+    <div class="modal-content">
+      <button class="clear-all" (click)="clearAllNotifications()">Clear All</button>
+      <div *ngFor="let notification of notifications" class="notification-row">
+        <span [ngClass]="{'READ': notification.status === 'READ', 'UNREAD': notification.status === 'UNREAD'}">
+          {{ notification.message }} on {{ formatDate(notification.date )}}
+          <mat-icon (click)="toggleReadStatus(notification)">
+            {{ notification.status === 'READ' ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </span>
+        <button class="delete-btn" (click)="deleteNotification(notification)">Delete</button>
+      </div>
+      <button class="close-btn" (click)="closeNotificationModal()">Close</button>
+    </div>
+  </div>
+</div>
